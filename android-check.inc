@@ -31,40 +31,95 @@ enum Client {
 
 static stock Client:clientType[MAX_PLAYERS] = {CLIENT_TYPE_ANDROID, ...};
 
-DEFINE_HOOK_REPLACEMENT__(ClientCheck, ClCheck);
-hook FIXES_OnClCheckResponse(playerid, actionid, memaddr, retndata) 
+public OnClientCheckResponse(playerid, actionid, memaddr, retndata)
 {
-	if (actionid == 0x48) 
+	if (actionid == 0x48)
 	{
 		clientType[playerid] = CLIENT_TYPE_PC;
 	}
-	return 1;
-}
 
-hook OnGameModeInit()
+	#if defined AC_OnClientCheckResponse
+		return AC_OnClientCheckResponse(playerid, actionid, memaddr, retndata);
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnClientCheckResponse
+	#undef OnClientCheckResponse
+#else
+	#define _ALS_OnClientCheckResponse
+#endif
+#define OnClientCheckResponse AC_OnClientCheckResponse
+#if defined AC_OnClientCheckResponse
+	forward AC_OnClientCheckResponse(playerid, actionid, memaddr, retndata);
+#endif
+
+public OnGameModeInit()
 {
 	#if !defined y_rconfix_Load && !defined _INC_SAMP_Community_fixes
 		LoadClientCheckFix();
 	#endif
 
-	return 1;
+	#if defined AC_OnGameModeInit
+		return AC_OnGameModeInit();
+	#else
+		return 1;
+	#endif
 }
+#if defined _ALS_OnGameModeInit
+	#undef OnGameModeInit
+#else
+	#define _ALS_OnGameModeInit
+#endif
+#define OnGameModeInit AC_OnGameModeInit
+#if defined AC_OnGameModeInit
+	forward AC_OnGameModeInit();
+#endif
 
-hook OnPlayerConnect(playerid)
+public OnPlayerConnect(playerid)
 {
 	// SendClientCheck example script by evgen1137
 	// thanks to MTA devs for structs
 	SendClientCheck(playerid, 0x48, 0, 0, 2);
 	SetTimerEx(#__InternalCheck, 1000, false, "i", playerid);
-	return 1;
-}
 
-hook OnPlayerDisconnect(playerid, reason)
+	#if defined AC_OnPlayerConnect
+		return AC_OnPlayerConnect(playerid);
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnPlayerConnect
+	#undef OnPlayerConnect
+#else
+	#define _ALS_OnPlayerConnect
+#endif
+#define OnPlayerConnect AC_OnPlayerConnect
+#if defined AC_OnPlayerConnect
+	forward AC_OnPlayerConnect(playerid);
+#endif
+
+
+public OnPlayerDisconnect(playerid, reason)
 {
 	// when player exit, we need to reset it back to "true"
 	clientType[playerid] = CLIENT_TYPE_ANDROID;
-	return 1;
+
+	#if defined AC_OnPlayerDisconnect
+		return AC_OnPlayerDisconnect(playerid, reason);
+	#else
+		return 1;
+	#endif
 }
+#if defined _ALS_OnPlayerDisconnect
+	#undef OnPlayerDisconnect
+#else
+	#define _ALS_OnPlayerDisconnect
+#endif
+#define OnPlayerDisconnect AC_OnPlayerDisconnect
+#if defined AC_OnPlayerDisconnect
+	forward AC_OnPlayerDisconnect(playerid, reason);
+#endif
 
 forward __InternalCheck(playerid);
 public __InternalCheck(playerid)
