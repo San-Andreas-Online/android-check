@@ -1,6 +1,6 @@
 /*
  * android-check, an include for checking if user connects from android "illegal" clients.
- * Originally made by Fairuz, modified by ff-agus44
+ * Originally made by Fairuz, modified by ff-agus44 and updated by San-Andreas-Online team.
  *
  * Credits:
  *   - Fairuz (Orignal Code)
@@ -10,10 +10,10 @@
 
 #include <a_samp>
 
-#tryinclude <YSI_Coding\y_hooks>
-
-#if !defined _INC_y_hooks
-	#error Please download YSI-Includes from: https://github.com/pawn-lang/YSI-Includes
+#if !defined _INC_android_check
+	#define _INC_android_check
+#else
+	#error You cannot include android_check more than once!
 #endif
 
 #if defined OnClientChecked
