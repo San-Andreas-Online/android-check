@@ -54,26 +54,50 @@ public OnClientCheckResponse(playerid, actionid, memaddr, retndata)
 	forward AC_OnClientCheckResponse(playerid, actionid, memaddr, retndata);
 #endif
 
-public OnGameModeInit()
-{
-	#if !defined y_rconfix_Load && !defined _INC_SAMP_Community_fixes
-		LoadClientCheckFix();
-	#endif
+#if defined FILTERSCRIPT
+	public OnFilterScriptInit()
+	{
+		#if !defined y_rconfix_Load && !defined _INC_SAMP_Community_fixes
+			LoadClientCheckFix();
+		#endif
 
-	#if defined AC_OnGameModeInit
-		return AC_OnGameModeInit();
+		#if defined AC_OnFilterScriptInit
+			return AC_OnFilterScriptInit();
+		#else
+			return 1;
+		#endif
+	}
+	#if defined _ALS_OnFilterScriptInit
+		#undef OnFilterScriptInit
 	#else
-		return 1;
+		#define _ALS_OnFilterScriptInit
 	#endif
-}
-#if defined _ALS_OnGameModeInit
-	#undef OnGameModeInit
+	#define OnFilterScriptInit AC_OnFilterScriptInit
+	#if defined AC_OnFilterScriptInit
+		forward AC_OnFilterScriptInit();
+	#endif
 #else
-	#define _ALS_OnGameModeInit
-#endif
-#define OnGameModeInit AC_OnGameModeInit
-#if defined AC_OnGameModeInit
-	forward AC_OnGameModeInit();
+	public OnGameModeInit()
+	{
+		#if !defined y_rconfix_Load && !defined _INC_SAMP_Community_fixes
+			LoadClientCheckFix();
+		#endif
+
+		#if defined AC_OnGameModeInit
+			return AC_OnGameModeInit();
+		#else
+			return 1;
+		#endif
+	}
+	#if defined _ALS_OnGameModeInit
+		#undef OnGameModeInit
+	#else
+		#define _ALS_OnGameModeInit
+	#endif
+	#define OnGameModeInit AC_OnGameModeInit
+	#if defined AC_OnGameModeInit
+		forward AC_OnGameModeInit();
+	#endif
 #endif
 
 public OnPlayerConnect(playerid)
